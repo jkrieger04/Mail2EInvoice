@@ -2,9 +2,9 @@
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
 
-Name "EMLWorker"
-OutFile "EMLWorker_Setup.exe"
-InstallDir "$PROGRAMFILES64\EMLWorker"
+Name "Mail2EInvoice"
+OutFile "Mail2EInvoice_Setup.exe"
+InstallDir "$PROGRAMFILES64\Mail2EInvoice"
 RequestExecutionLevel admin
 
 Page directory
@@ -19,7 +19,7 @@ Section "Install"
   
   ; --- Stop existing service (if installed) ---
   DetailPrint "Stopping existing service (if running)..."
-  ExecWait 'sc stop EMLWorker'
+  ExecWait 'sc stop Mail2EInvoice'
 
   ; Optional: wait a moment to ensure shutdown
   Sleep 2000
@@ -40,11 +40,11 @@ Section "Install"
 
   ; --- Install service ---
   DetailPrint "Creating Windows service..."
-  ExecWait 'sc create EMLWorker binPath= "$INSTDIR\EMLWorker.exe" start= auto'
+  ExecWait 'sc create Mail2EInvoice binPath= "$INSTDIR\Mail2EInvoice.exe" start= auto'
 
   ; --- Start service ---
   DetailPrint "Starting service..."
-  ExecWait 'sc start EMLWorker'
+  ExecWait 'sc start Mail2EInvoice'
 
   ; --- Uninstaller ---
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -56,11 +56,11 @@ Section "Uninstall"
 
   ; Stop service
   DetailPrint "Stopping service..."
-  ExecWait 'sc stop EMLWorker'
+  ExecWait 'sc stop Mail2EInvoice'
 
   ; Delete service
   DetailPrint "Deleting service..."
-  ExecWait 'sc delete EMLWorker'
+  ExecWait 'sc delete Mail2EInvoice'
 
   ; Remove installed files
   RMDir /r "$INSTDIR"
