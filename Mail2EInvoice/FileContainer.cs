@@ -1,4 +1,4 @@
-﻿namespace EMLWorker
+﻿namespace Mail2EInvoice
 {
     public class FileContainer
     {

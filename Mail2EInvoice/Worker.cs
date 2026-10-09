@@ -1,7 +1,6 @@
 using PdfSharp.Pdf.IO;
-using System.Text.Json;
 
-namespace EMLWorker
+namespace Mail2EInvoice
 {
     public class Worker : BackgroundService
     {
@@ -18,12 +17,18 @@ namespace EMLWorker
         {
             var xmlParser = new XMLParser(_configuration.EInvoiceConverterURL, _configuration.EInvoiceConverterApiKey);
 
-            _logger.LogInformation($"Start Worker");
+            _logger.LogInformation($"ProcessingWorker started.");
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 foreach (var configurationFolder in _configuration.ConfigurationFolders)
                 {
+                    if (!Directory.Exists(configurationFolder.SourceDirectory))
+                    {
+                        _logger.LogInformation($"Soruce Directory Does Not Exist: {configurationFolder.SourceDirectory}");
+                        continue;
+                    }
+
                     var emlFiles = Directory.GetFiles(configurationFolder.SourceDirectory, "*.eml");
 
                     foreach (var emlFile in emlFiles)
@@ -46,7 +51,11 @@ namespace EMLWorker
                                 emailBodyContent = await emlParser.RenderEMailToPdf();
                             }
 
-                            if (configurationFolder.UsePdfForXml)
+                            if (!configurationFolder.SupportXml)
+                            {
+                                fileContainerList.RemoveAll(x => x.FileType == FileType.XML);
+                            }
+                            else if (configurationFolder.UsePdfForXml)
                             {
                                 var containersToRemove = new List<string>();
                                 foreach (var xmlFileContainer in fileContainerList.Where(f => 
@@ -70,8 +79,8 @@ namespace EMLWorker
                             {
                                 _logger.LogInformation($"No Attachment Found. Process EMail Without Attachment");
 
-                                var emlWithoutAttachmenFileContainer = new FileContainer(Path.ChangeExtension(emlFileName, ".pdf"), emailBodyContent);
-                                fileContainerList.Add(emlWithoutAttachmenFileContainer);
+                                var emlWithoutAttachmentFileContainer = new FileContainer(Path.ChangeExtension(emlFileName, ".pdf"), emailBodyContent);
+                                fileContainerList.Add(emlWithoutAttachmentFileContainer);
                                 emailBodyContent = null;
                             }
 
@@ -139,10 +148,17 @@ namespace EMLWorker
                     }
                 }
 
-                await Task.Delay(5000, stoppingToken);
+                try
+                {
+                    await Task.Delay(5000, stoppingToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
 
-            _logger.LogInformation($"Stopped Worker");
+            _logger.LogInformation($"ProcessingWorker stopping.");
         }
 
         private async Task AttachEMailBody(FileContainer fileContainer, byte[] emailContent)

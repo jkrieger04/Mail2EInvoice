@@ -4,14 +4,9 @@ using PuppeteerSharp.Media;
 using System.Net;
 using System.Text;
 
-namespace EMLWorker
+namespace Mail2EInvoice
 {
-    public interface IEMLParser
-    {
-        Task<List<FileContainer>> GetAttachments();
-    }
-
-    public class EMLParser : IEMLParser
+    public class EMLParser
     {
         private MimeMessage _message;
 
@@ -202,28 +197,28 @@ namespace EMLWorker
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("########################################################");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"From = \"{ConvertToPLValue(_message.From.Mailboxes.FirstOrDefault()?.Address)}\"");
+            stringBuilder.Append($"From = \"{ConvertToJPLValue(_message.From.Mailboxes.FirstOrDefault()?.Address)}\"");
             stringBuilder.Append(Environment.NewLine);
             stringBuilder.Append($"To = \"{ConvertListToJPLValue(_message.To.Mailboxes.Select(x => x.Address).ToList())}\"");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"ReplyTo = \"{ConvertToPLValue(_message.ReplyTo.ToString())}\"");
+            stringBuilder.Append($"ReplyTo = \"{ConvertToJPLValue(_message.ReplyTo.ToString())}\"");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"OriginalFileName = \"{ConvertToPLValue(emlFileName)}\"");
+            stringBuilder.Append($"OriginalFileName = \"{ConvertToJPLValue(emlFileName)}\"");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"OriginalAttachmentFileName = \"{ConvertToPLValue(attachmentFileName)}\"");
+            stringBuilder.Append($"OriginalAttachmentFileName = \"{ConvertToJPLValue(attachmentFileName)}\"");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"MessageId = \"{ConvertToPLValue(_message.MessageId)}\"");
+            stringBuilder.Append($"MessageId = \"{ConvertToJPLValue(_message.MessageId)}\"");
             stringBuilder.Append(Environment.NewLine);
-            stringBuilder.Append($"Subject = \"{ConvertToPLValue(_message.Subject)}\"");
+            stringBuilder.Append($"Subject = \"{ConvertToJPLValue(_message.Subject)}\"");
             stringBuilder.Append(Environment.NewLine);
             stringBuilder.Append($"CC = \"{ConvertListToJPLValue(_message.Cc.Mailboxes.Select(x => x.Address.ToString()).ToList())}\"");
             stringBuilder.Append(Environment.NewLine);
             if (_message.Date.LocalDateTime != DateTime.MinValue)
             {
-                stringBuilder.Append($"DateReceived = \"{ConvertToPLValue(_message.Date.LocalDateTime.ToString("dd.MM.yyyy"))}\"");
+                stringBuilder.Append($"DateReceived = \"{ConvertToJPLValue(_message.Date.LocalDateTime.ToString("dd.MM.yyyy"))}\"");
                 stringBuilder.Append(Environment.NewLine);
             }
-            stringBuilder.Append($"MAILBOX = \"{ConvertToPLValue(_message.To.Mailboxes.FirstOrDefault()?.Address)}\"");
+            stringBuilder.Append($"MAILBOX = \"{ConvertToJPLValue(_message.To.Mailboxes.FirstOrDefault()?.Address)}\"");
             stringBuilder.Append(Environment.NewLine);
             stringBuilder.Append("########################################################");
             stringBuilder.Append(Environment.NewLine);
@@ -231,7 +226,7 @@ namespace EMLWorker
             return stringBuilder.ToString();
         }
 
-        internal static string ConvertToPLValue(string val)
+        internal static string ConvertToJPLValue(string val)
         {
             if (string.IsNullOrEmpty(val))
                 return "";
@@ -248,7 +243,7 @@ namespace EMLWorker
             StringBuilder stringBuilder = new StringBuilder();
             foreach (string listValue in listValues)
             {
-                string jpValue = ConvertToPLValue(listValue);
+                string jpValue = ConvertToJPLValue(listValue);
                 if (!string.IsNullOrEmpty(jpValue))
                 {
                     if (stringBuilder.Length > 0)

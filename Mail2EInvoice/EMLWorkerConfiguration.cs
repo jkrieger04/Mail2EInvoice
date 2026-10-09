@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace EMLWorker
+namespace Mail2EInvoice
 {
     public static class EMLWorkerConfigurationHelper
     {
@@ -32,9 +32,9 @@ namespace EMLWorker
 
     public class EMLWorkerConfiguration
     {
-        public List<EMLWorkerConfigurationFolder> ConfigurationFolders { get; set; } = new List<EMLWorkerConfigurationFolder>();
         public string EInvoiceConverterURL { get; set; } = "";
         public string EInvoiceConverterApiKey { get; set; } = "";
+        public List<EMLWorkerConfigurationFolder> ConfigurationFolders { get; set; } = new List<EMLWorkerConfigurationFolder>();
     }
 
     public class EMLWorkerConfigurationFolder
@@ -44,6 +44,7 @@ namespace EMLWorker
         public string BackupDirectory { get; set; }
         public string ErrorDirectory { get; set; }
         public bool AttachEMail { get; set; }
+        public bool SupportXml { get; set; }
         public bool UsePdfForXml { get; set; }
         public bool CreateJpl { get; set; }
         public bool ProcessEmlWithoutAttachment { get; set; }

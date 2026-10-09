@@ -1,0 +1,1 @@
+dotnet publish ./Mail2EInvoice.slnx -c Release -r win-x64

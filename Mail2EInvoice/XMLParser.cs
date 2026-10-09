@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace EMLWorker
+namespace Mail2EInvoice
 {
     public class XMLParser
     {
@@ -11,8 +11,14 @@ namespace EMLWorker
 
         public XMLParser(string url, string apiKey)
         {
+            /*var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };*/
+
             _httpClient = new HttpClient();
-            _url = url;
+            _url = url + "/classcon-einvoice/api/v1";
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         }
 

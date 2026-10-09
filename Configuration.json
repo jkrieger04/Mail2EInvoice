@@ -1,0 +1,17 @@
+{
+  "EInvoiceConverterURL": "https://hostname",
+  "EInvoiceConverterApiKey": "",
+  "ConfigurationFolders": [
+    {
+      "SourceDirectory": "Example\\EML\\Input",
+      "TargetDirectory": "Example\\EML\\Target",
+      "BackupDirectory": "Example\\EML\\Backup",
+      "ErrorDirectory": "Example\\EML\\Error",
+      "AttachEMail": true,
+      "SupportXml": true,
+      "UsePdfForXml": true,
+      "CreateJpl": true,
+      "ProcessEmlWithoutAttachment": true
+    }
+  ]
+}

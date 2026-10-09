@@ -480,3 +480,4 @@ Backend/WhiteBox.WebApi/_PublishedModels/
 Backend/WhiteBox.Worker/Properties/launchSettings.json
 EMLWorker/ChromeHeadlessShell/
 Mail2EInvoice/ChromeHeadlessShell/
+Mail2EInvoice/Runtime/

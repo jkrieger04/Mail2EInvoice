@@ -5,16 +5,29 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-EMLWorker-cf1387db-8d08-4d95-92a6-ef797589fe8c</UserSecretsId>
+	<CETCompat>false</CETCompat>
+
+	<AssemblyTitle>Mail2EInvoice</AssemblyTitle>
+	<Product>Mail2EInvoice</Product>
+	<Company>Inbox concept Systemhaus GmbH</Company>
+	<Authors>Jens Krieger</Authors>
+
+	<Version>1.0.0</Version>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<FileVersion>1.0.0.0</FileVersion>
+
+	<Description>Verarbeitet E-Mails und bereitet Anghänge zur Weiterverarbeitung auf.</Description>
+	<Copyright>© 2026 Inbox concept Systemhaus GmbH</Copyright>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <None Include="Configuration.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
 	<None Include="ChromeHeadlessShell\**">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Include="Runtime\**">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
   </ItemGroup>
@@ -32,6 +45,9 @@
 
   <ItemGroup>
     <None Update="Default.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

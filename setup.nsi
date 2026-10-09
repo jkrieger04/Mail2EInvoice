@@ -27,7 +27,7 @@ Section "Install"
   ; --- Files ---
   CreateDirectory "$INSTDIR"
   SetOutPath "$INSTDIR"
-  File /r "bin\Release\net10.0\win-x64\publish\*.*"
+  File /r "Mail2EInvoice\bin\Release\net10.0\win-x64\publish\*.*"
 
   ; Only copy Configuration.json if NOT exists
   IfFileExists "$INSTDIR\Configuration.json" skip_settings

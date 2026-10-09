@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace EMLWorker
+namespace Mail2EInvoice
 {
     public class CryptHelper
     {
@@ -29,6 +29,12 @@ namespace EMLWorker
         public static string Decrypt(string cipherText, out bool needEncryption)
         {
             needEncryption = false;
+
+            if (string.IsNullOrEmpty(cipherText))
+            {
+                return cipherText;
+            }
+
             try
             {
                 var fullCipher = Convert.FromBase64String(cipherText);
