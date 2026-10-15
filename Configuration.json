@@ -3,10 +3,10 @@
   "EInvoiceConverterApiKey": "",
   "ConfigurationFolders": [
     {
-      "SourceDirectory": "Example\\EML\\Input",
-      "TargetDirectory": "Example\\EML\\Target",
-      "BackupDirectory": "Example\\EML\\Backup",
-      "ErrorDirectory": "Example\\EML\\Error",
+      "SourceDirectory": "Example\\Input",
+      "TargetDirectory": "Example\\Output",
+      "BackupDirectory": "Example\\Backup",
+      "ErrorDirectory": "Example\\Error",
       "AttachEMail": true,
       "SupportXml": true,
       "UsePdfForXml": true,

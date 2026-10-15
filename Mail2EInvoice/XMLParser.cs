@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -100,14 +102,76 @@ namespace Mail2EInvoice
                 throw new Exception($"EInvoice Converter Not Finished");
             }
         }
+
+        public async Task CreateDefaultPdf(FileContainer fileContainer)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            QuestPDF.Settings.UseSystemFonts = true;
+            string xmlContent = Encoding.UTF8.GetString(fileContainer.OriginalContent);
+
+            using var resultStream = new MemoryStream();
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Margin(20);
+                    page.DefaultTextStyle(x => x.FontFamily("Arial"));
+
+                    page.Content().Column(column =>
+                    {
+                        column.Spacing(40);
+
+                        column.Item()
+                            .AlignCenter()
+                            .Text("PDF-Darstellung der E-Rechnung nicht verfügbar")
+                            .FontSize(20)
+                            .SemiBold();
+
+                        column.Item().AlignCenter().Text(
+                            "Für die vorliegende E-Rechnung konnte keine darstellbare PDF-Ansicht erzeugt werden.");
+
+                        column.Item().AlignCenter().Text(
+                            "Die Ursache kann ein technisches Problem bei der Verarbeitung der Rechnung oder eine fehlerhafte bzw. ungültige E-Rechnungsdatei sein. Daher ist eine automatische Visualisierung der enthaltenen Rechnungsdaten derzeit nicht möglich.");
+
+                        column.Item().AlignCenter().Text(
+                            "Bitte prüfen Sie die zugrunde liegende XML-Datei oder wenden Sie sich an den Rechnungssteller, um eine korrigierte Version der E-Rechnung zu erhalten.");
+
+                        column.Item().AlignCenter().AlignCenter().PaddingTop(30).Text("Hinweis:")
+                            .Bold();
+
+                        column.Item().AlignCenter().Text("Die Nichtverfügbarkeit der PDF-Darstellung bedeutet nicht zwangsläufig, dass die Rechnungsdaten unvollständig sind. Für die weitere Analyse ist die originale XML-Datei heranzuziehen.");
+
+                        column.Item().AlignCenter().Text("Der Inhalt der XML-Datei ist auf den nachfolgenden Seiten abgebildet.");
+                    });
+                });
+
+                container.Page(page =>
+                {
+                    page.Margin(20);
+
+                    page.Content()
+                        .Text(xmlContent)
+                        .FontFamily("Arial")
+                        .FontSize(10);
+                });
+            })
+            .GeneratePdf(resultStream);
+
+            fileContainer.PdfContent = resultStream.ToArray();
+        }
     }
 
     public class ProcessRequest
     {
         public string filename { get; set; }
+
         public List<string> attachments { get; set; }
+
         public List<string> additionalPages { get; set; }
+
         public string content { get; set; }
+
         public bool cmlOnly { get; set; }
     }
 

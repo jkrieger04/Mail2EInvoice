@@ -16,7 +16,7 @@
 	<AssemblyVersion>1.0.0.0</AssemblyVersion>
 	<FileVersion>1.0.0.0</FileVersion>
 
-	<Description>Verarbeitet E-Mails und bereitet Anghänge zur Weiterverarbeitung auf.</Description>
+	<Description>Verarbeitet E-Mails (EML-Dateien) und bereitet Anhänge zur Weiterverarbeitung auf.</Description>
 	<Copyright>© 2026 Inbox concept Systemhaus GmbH</Copyright>
   </PropertyGroup>
 
@@ -33,20 +33,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.13" />
     <PackageReference Include="MimeKit" Version="4.18.1" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
-    <PackageReference Include="PuppeteerSharp" Version="25.12.0" />
+    <PackageReference Include="PuppeteerSharp" Version="25.13.1" />
+    <PackageReference Include="QuestPDF" Version="2026.9.1" />
     <PackageReference Include="Serilog" Version="4.4.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Default.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

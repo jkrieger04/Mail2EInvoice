@@ -25,8 +25,18 @@ namespace Mail2EInvoice
                 {
                     if (!Directory.Exists(configurationFolder.SourceDirectory))
                     {
-                        _logger.LogInformation($"Soruce Directory Does Not Exist: {configurationFolder.SourceDirectory}");
-                        continue;
+                        if (Directory.Exists(Path.Combine(AppContext.BaseDirectory, configurationFolder.SourceDirectory)))
+                        {
+                            configurationFolder.SourceDirectory = Path.Combine(AppContext.BaseDirectory, configurationFolder.SourceDirectory);
+                            configurationFolder.ErrorDirectory = Path.Combine(AppContext.BaseDirectory, configurationFolder.ErrorDirectory);
+                            configurationFolder.BackupDirectory = Path.Combine(AppContext.BaseDirectory, configurationFolder.BackupDirectory);
+                            configurationFolder.TargetDirectory = Path.Combine(AppContext.BaseDirectory, configurationFolder.TargetDirectory);
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Soruce Directory Does Not Exist: {configurationFolder.SourceDirectory}");
+                            continue;
+                        }
                     }
 
                     var emlFiles = Directory.GetFiles(configurationFolder.SourceDirectory, "*.eml");
@@ -38,9 +48,7 @@ namespace Mail2EInvoice
                         try
                         {
                             var emlContent = await File.ReadAllBytesAsync(emlFile);
-
                             var emlParser = new EMLParser();
-
                             await emlParser.LoadEML(emlContent);
 
                             var fileContainerList = await emlParser.GetAttachments();
@@ -58,12 +66,12 @@ namespace Mail2EInvoice
                             else if (configurationFolder.UsePdfForXml)
                             {
                                 var containersToRemove = new List<string>();
-                                foreach (var xmlFileContainer in fileContainerList.Where(f => 
+                                foreach (var xmlFileContainer in fileContainerList.Where(f =>
                                             f.FileName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase)))
                                 {
                                     var pdfSearchFileName = Path.GetFileNameWithoutExtension(xmlFileContainer.FileName) + ".pdf";
 
-                                    var pdfFileContainer = fileContainerList.SingleOrDefault(f => 
+                                    var pdfFileContainer = fileContainerList.SingleOrDefault(f =>
                                                                 f.FileName.Equals(pdfSearchFileName, StringComparison.OrdinalIgnoreCase));
 
                                     if (pdfFileContainer != null)
@@ -108,9 +116,9 @@ namespace Mail2EInvoice
                                             {
                                                 _logger.LogError(ex2, "Retry Failed. Use Default PDF");
 
-                                                fileContainer.PdfContent = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Default.pdf"));
+                                                await xmlParser.CreateDefaultPdf(fileContainer);
                                             }
-                                        }                                          
+                                        }
                                         break;
                                 }
 
@@ -143,7 +151,7 @@ namespace Mail2EInvoice
                             catch (Exception ex2)
                             {
                                 _logger.LogError(ex2, $"Failed To Move EML File in Error Folder: {emlFileName}");
-                            }       
+                            }
                         }
                     }
                 }

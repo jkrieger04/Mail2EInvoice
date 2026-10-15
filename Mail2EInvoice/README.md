@@ -8,6 +8,7 @@ The application converts EML files and their attachments for further processing 
 		- SourceDirectory: Directory that is monitored for EML files.
 		- TargetDirectory: Directory where the documents are stored.
 		- BackupDirectory: Directory where the EML files are stored once they have been successfully processed. They are deleted after 10 days.
+		- ErrorDirectory: Directory for EML files that could not be processed successfully. They are deleted after 30 days.
 		- AttachEMail: Generate a PDF from an EML file, including metadata, and append the extracted email attachments to the end of the PDF document.
 		- SupportXml: Support for processing XML files, which are interpreted as e-invoices and used to generate PDFs.
 		- UsePdfForXml: If a PDF and an XML file with the same name are attached to an email, the PDF document is used for the e-invoice. Otherwise, both attachments are processed separately.
@@ -15,7 +16,8 @@ The application converts EML files and their attachments for further processing 
 		- ProcessEmlWithoutAttachment: Process EML files without attachments as well.
 
 # Used third components
-	- MimeKit
-	- PDFsharp
-	- PuppeteerSharp
-	- Serilog
+	- MimeKit (4.18.1)
+	- PDFsharp (6.2.4)
+	- QuestPDF (2026.9.1)
+	- PuppeteerSharp (25.13.1)
+	- Serilog (4.4.0)

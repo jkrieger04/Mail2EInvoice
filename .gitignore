@@ -481,3 +481,4 @@ Backend/WhiteBox.Worker/Properties/launchSettings.json
 EMLWorker/ChromeHeadlessShell/
 Mail2EInvoice/ChromeHeadlessShell/
 Mail2EInvoice/Runtime/
+Mail2EInvoice_Setup.exe

@@ -26,6 +26,11 @@ Section "Install"
 
   ; --- Files ---
   CreateDirectory "$INSTDIR"
+  CreateDirectory "$INSTDIR\Example"
+  CreateDirectory "$INSTDIR\Example\Input"
+  CreateDirectory "$INSTDIR\Example\Output"
+  CreateDirectory "$INSTDIR\Example\Backup"
+  CreateDirectory "$INSTDIR\Example\Error"
   SetOutPath "$INSTDIR"
   File /r "Mail2EInvoice\bin\Release\net10.0\win-x64\publish\*.*"
 
@@ -37,10 +42,14 @@ Section "Install"
 
   ; --- Shortcut (Icon equivalent) ---
   ;CreateShortcut "$INSTDIR\WhiteBox Configurator.lnk" "$INSTDIR\Configuration\WhiteBox.Configurator.exe"
+  
+  ; --- Install Dotnet Runtime ---
+  ExecWait '"$INSTDIR\Runtime\dotnet-runtime-10-win-x64.exe" /install /quiet /norestart'
 
   ; --- Install service ---
   DetailPrint "Creating Windows service..."
   ExecWait 'sc create Mail2EInvoice binPath= "$INSTDIR\Mail2EInvoice.exe" start= auto'
+  ExecWait 'sc description Mail2EInvoice "Verarbeitet E-Mails (EML-Dateien) und bereitet Anhänge zur Weiterverarbeitung auf."'
 
   ; --- Start service ---
   DetailPrint "Starting service..."
